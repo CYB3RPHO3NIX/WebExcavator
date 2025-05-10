@@ -3,26 +3,26 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Excavator.Web</title>
+    <title>@ViewData["Title"] - Web Excavator</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Excavator.Web.styles.css" asp-append-version="true" />
     <link href="~/semantic-ui/semantic.css" rel="stylesheet" />
 </head>
 <body>
     <header style="padding: 0.5%;">
-        <div class="ui large menu" >
+        <div class="ui huge menu" >
             <div class="header item">
                 Web Excavator
             </div>
             <a class="item">
-                Workers
+                Projects
             </a>
             <a class="item">
                 Explore Data
             </a>
             <div class="right menu">
-                <a class="item">Settings</a>
-                <a class="item">Help</a>
+                <a class="item" asp-controller="Settings" asp-action="Index">Settings</a>
+                <a class="item" asp-controller="Help" asp-action="Index">Help</a>
             </div>
         </div>
     </header>
