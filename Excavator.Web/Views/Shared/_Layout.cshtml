@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Excavator.Web</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Excavator.Web.styles.css" asp-append-version="true" />
+    <link href="~/semantic-ui/semantic.css" rel="stylesheet" />
+</head>
+<body>
+    <header style="padding: 0.5%;">
+        <div class="ui large menu" >
+            <div class="header item">
+                Web Excavator
+            </div>
+            <a class="item">
+                Workers
+            </a>
+            <a class="item">
+                Explore Data
+            </a>
+            <div class="right menu">
+                <a class="item">Settings</a>
+                <a class="item">Help</a>
+            </div>
+        </div>
+    </header>
+    <div>
+        <main style="padding: 0.5%;">
+            <div class="ui raised segment">
+                @RenderBody()
+            </div>
+        </main>
+    </div>
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/semantic-ui/semantic.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
