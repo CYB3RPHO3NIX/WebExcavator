@@ -14,6 +14,9 @@
             <div class="header item">
                 Web Excavator
             </div>
+            <a class="item" asp-controller="Home" asp-action="Index">
+                Home
+            </a>
             <a class="item">
                 Projects
             </a>
@@ -28,7 +31,7 @@
     </header>
     <div>
         <main style="padding: 0.5%;">
-            <div class="ui raised segment">
+            <div class="ui segment">
                 @RenderBody()
             </div>
         </main>
