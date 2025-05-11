@@ -15,7 +15,6 @@ namespace Excavator.Web.Controllers
         }
         public IActionResult Index()
         {
-            var data =  _mediator.Send(new GetAllSettingsQuery()).GetAwaiter().GetResult();
             return View();
         }
     }
