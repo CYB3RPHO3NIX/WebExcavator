@@ -11,7 +11,7 @@ namespace Excavator.Database.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddDatabaseService<TContext>(
+        public static IServiceCollection AddDbContext<TContext>(
             this IServiceCollection services,
             string connectionString,
             ServiceLifetime contextLifetime = ServiceLifetime.Scoped,

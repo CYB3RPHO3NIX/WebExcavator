@@ -1,5 +1,8 @@
 using Excavator.Database.DbContexts;
 using Excavator.Database.Extensions;
+using Microsoft.Extensions.DependencyInjection;
+using Excavator.Web.Services;
+
 namespace Excavator.Web
 {
     public class Program
@@ -11,12 +14,15 @@ namespace Excavator.Web
             // Add services to the container.
             builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
-            builder.Services.AddDatabaseService<ExcavatorDatabaseContext>(
-                builder.Configuration.GetConnectionString("DefaultConnection")
+            builder.Services.AddDbContext<ExcavatorDatabaseContext>(
+                builder.Configuration.GetConnectionString("Database")
             );
 
-            var app = builder.Build();
+            builder.Services.AddAutoMapperServices();
 
+            builder.Services.AddMediatRServices();
+
+            var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())
             {
@@ -32,6 +38,7 @@ namespace Excavator.Web
             }
 
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
