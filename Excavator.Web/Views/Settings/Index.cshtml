@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Excavator.Shared.Models.DTOs.Settings
+@{
     ViewData["Title"] = "Settings";
 }
 
@@ -9,27 +10,52 @@
         <div class="sub header">Manage your preferences</div>
     </div>
 </div>
-<div class="ui grid">
-    <!-- Left column (30% width) -->
-    <div class="three wide column">
-        <div class="ui vertical fluid pointing menu">
-            <a class="active item">
-                Menu Item 1
-            </a>
-            <a class="item">
-                Menu Item 2
-            </a>
-            <a class="item">
-                Menu Item 3
-            </a>
-        </div>
+
+<div class="ui grid" id="settingsContainer">
+    <!-- Left column (30% width) - Will be loaded via AJAX -->
+    <div class="three wide column" id="settingsMenuContainer">
+        @await Html.PartialAsync("_SettingsMenu", new List<string>())
     </div>
 
-    <!-- Right column (remaining width) -->
-    <div class="thirteen wide column">
-        <div class="ui segment">
-            <!-- Your content goes here -->
-            This is your content segment
-        </div>
+    <!-- Right column (remaining width) - Will be loaded via AJAX -->
+    <div class="thirteen wide column" id="settingsContentContainer">
+        @await Html.PartialAsync("_SettingsContent", new List<SettingDTO>())
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Load menu initially
+            loadMenu();
+
+            // Function to load menu
+            function loadMenu() {
+                $('#settingsMenuContainer').load('@Url.Action("GetMenu", "Settings")', function() {
+                    // After menu loads, click the first item if none is active
+                    if ($('#settingsMenuContainer .active.item').length === 0) {
+                        $('#settingsMenuContainer .item:first').click();
+                    }
+                });
+            }
+
+            // Handle menu item clicks
+            $(document).on('click', '#settingsMenuContainer .item', function(e) {
+                e.preventDefault();
+                const section = $(this).data('section');
+
+                // Update active state
+                $('#settingsMenuContainer .item').removeClass('active');
+                $(this).addClass('active');
+
+                // Load content
+                loadSettingsContent(section);
+            });
+
+            // Function to load settings content
+            function loadSettingsContent(section) {
+                $('#settingsContentContainer').load('@Url.Action("GetSettings", "Settings")' + '?section=' + encodeURIComponent(section));
+            }
+        });
+    </script>
+}

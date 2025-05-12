@@ -1,0 +1,10 @@
+﻿@model List<string>
+
+<div class="ui vertical fluid pointing menu">
+    @foreach (var sectionName in Model)
+    {
+        <a class="item" data-section="@sectionName">
+            @sectionName
+        </a>
+    }
+</div>

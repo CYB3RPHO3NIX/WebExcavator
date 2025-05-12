@@ -1,0 +1,37 @@
+﻿@using Excavator.Shared.Models.DTOs.Settings
+@model List<SettingDTO>
+
+@if (Model.Any())
+{
+    <div class="ui segment">
+        <div class="ui relaxed divided list">
+            @foreach (var setting in Model)
+            {
+                <div class="item">
+                    <div class="content">
+                        <div class="header">@setting.Key</div>
+                        <div class="description">@setting.Description</div>
+                    </div>
+                    <div class="right floated content">
+                        <div class="ui input">
+                            <input type="text" value="@setting.Value"
+                                   data-key="@setting.Key"
+                                   data-original="@setting.Value"
+                            @(setting.IsEncrypted ? "disabled" : "")>
+                        </div>
+                        @if (setting.IsEncrypted)
+                        {
+                            <div class="ui tiny label">Encrypted</div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="ui warning message">
+        No settings found for this section.
+    </div>
+}

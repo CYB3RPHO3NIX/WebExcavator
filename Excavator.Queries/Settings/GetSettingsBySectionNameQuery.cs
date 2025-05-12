@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace Excavator.Queries.Settings
 {
-    public class GetAllSettingsQuery : IRequest<IEnumerable<SettingDTO>>
+    public class GetSettingsBySectionNameQuery : IRequest<IEnumerable<SettingDTO>>
     {
-    }   
+        public string SectionName { get; set; }
+    }
 }
