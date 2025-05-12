@@ -2,6 +2,7 @@ using Excavator.Database.DbContexts;
 using Excavator.Database.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Excavator.Web.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Excavator.Web
 {
