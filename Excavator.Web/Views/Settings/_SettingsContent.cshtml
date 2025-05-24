@@ -4,28 +4,38 @@
 @if (Model.Any())
 {
     <div class="ui segment">
-        <div class="ui relaxed divided list">
+        <div class="ui grid">
+
             @foreach (var setting in Model)
             {
-                <div class="item">
-                    <div class="content">
-                        <div class="header">@setting.Key</div>
-                        <div class="description">@setting.Description</div>
+                <div class="two column row">
+                    <div class="left floated column">
+                        <div class="header"><b>@setting.Key</b></div>
+                        <div class="description" style="color: gray;">@setting.Description</div>
                     </div>
-                    <div class="right floated content">
-                        <div class="ui input">
-                            <input type="text" value="@setting.Value"
-                                   data-key="@setting.Key"
-                                   data-original="@setting.Value"
-                            @(setting.IsEncrypted ? "disabled" : "")>
-                        </div>
+                    <div class="right floated column">
                         @if (setting.IsEncrypted)
                         {
-                            <div class="ui tiny label">Encrypted</div>
+                            <div class="ui right labeled left icon fluid input">
+                                <i class="lock icon"></i>
+                                <input type="password" value="@(new string('*', setting.Value.Length))" readonly>
+                                <a class="ui tag label">
+                                    Encrypted
+                                </a>
+                            </div>
+                        }else
+                        {
+                            <div class="ui fluid input">
+                                <input type="text" value="@setting.Value"
+                                       data-key="@setting.Key"
+                                       data-original="@setting.Value"
+                                @(setting.IsEncrypted ? "disabled" : "")>
+                            </div>
                         }
                     </div>
                 </div>
             }
+            
         </div>
     </div>
 }
