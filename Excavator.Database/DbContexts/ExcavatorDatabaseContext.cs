@@ -10,187 +10,163 @@ namespace Excavator.Database.DbContexts
 {
     public class ExcavatorDatabaseContext : DbContext
     {
-        public ExcavatorDatabaseContext(DbContextOptions<ExcavatorDatabaseContext> options) : base(options) 
+        public ExcavatorDatabaseContext(DbContextOptions<ExcavatorDatabaseContext> options) : base(options)
         { }
 
         public DbSet<Setting> Settings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //base.OnModelCreating(modelBuilder);
-
             var settings = new List<Setting>
             {
                 // General Settings
                 new Setting
                 {
+                    Id = Guid.NewGuid(),
+                    Section = "General",
                     Key = "AppName",
-                    Value = "MyApplication",
+                    Name = "Application Name",
+                    Type = SettingType.String,
+                    Value = "Excavator Pro",
                     Description = "The display name of the application",
-                    Section = "General",
-                    IsEncrypted = false
+                    CreatedAt = DateTime.UtcNow
                 },
                 new Setting
                 {
+                    Id = Guid.NewGuid(),
+                    Section = "General",
                     Key = "AppVersion",
-                    Value = "1.0.0",
+                    Name = "Application Version",
+                    Type = SettingType.String,
+                    Value = "2.5.0",
                     Description = "Current application version",
-                    Section = "General",
-                    IsEncrypted = false
+                    CreatedAt = DateTime.UtcNow
                 },
-                new Setting
-                {
-                    Key = "CompanyName",
-                    Value = "Acme Inc.",
-                    Description = "The company name",
-                    Section = "General",
-                    IsEncrypted = false
-                },
-    
+
                 // Security Settings
                 new Setting
                 {
+                    Id = Guid.NewGuid(),
+                    Section = "Security",
                     Key = "MaxLoginAttempts",
+                    Name = "Maximum Login Attempts",
+                    Type = SettingType.Integer,
                     Value = "5",
-                    Description = "Maximum allowed failed login attempts before lockout",
+                    IntValue = 5,
+                    MinIntValue = 1,
+                    MaxIntValue = 10,
+                    Description = "Maximum allowed login attempts before lockout",
+                    CreatedAt = DateTime.UtcNow
+                },
+                new Setting
+                {
+                    Id = Guid.NewGuid(),
                     Section = "Security",
-                    IsEncrypted = false
-                },
-                new Setting
-                {
-                    Key = "PasswordExpiryDays",
-                    Value = "90",
-                    Description = "Number of days before passwords expire",
-                    Section = "Security",
-                    IsEncrypted = false
-                },
-                new Setting
-                {
-                    Key = "RequireTwoFactor",
-                    Value = "true",
-                    Description = "Whether two-factor authentication is required",
-                    Section = "Security",
-                    IsEncrypted = false
-                },
-    
-                // Integration Settings
-                new Setting
-                {
-                    Key = "ApiKey",
-                    Value = "encrypted-value-here",
-                    Description = "Third-party API access key",
-                    Section = "Integration",
-                    IsEncrypted = true
-                },
-                new Setting
-                {
-                    Key = "ExternalApiUrl",
-                    Value = "https://api.example.com/v1",
-                    Description = "Base URL for external API",
-                    Section = "Integration",
-                    IsEncrypted = false
-                },
-                new Setting
-                {
-                    Key = "SyncIntervalMinutes",
+                    Key = "SessionTimeout",
+                    Name = "Session Timeout",
+                    Type = SettingType.Integer,
                     Value = "30",
-                    Description = "How often to sync with external services (in minutes)",
-                    Section = "Integration",
-                    IsEncrypted = false
+                    IntValue = 30,
+                    MinIntValue = 5,
+                    MaxIntValue = 120,
+                    Description = "Session timeout in minutes",
+                    CreatedAt = DateTime.UtcNow
                 },
-    
+                new Setting
+                {
+                    Id = Guid.NewGuid(),
+                    Section = "Security",
+                    Key = "ApiToken",
+                    Name = "API Token",
+                    Type = SettingType.Secret,
+                    Value = "encrypted-token-value",
+                    IsEncrypted = true,
+                    Description = "API access token",
+                    CreatedAt = DateTime.UtcNow
+                },
+
+                // UI Settings
+                new Setting
+                {
+                    Id = Guid.NewGuid(),
+                    Section = "UI",
+                    Key = "Theme",
+                    Name = "Application Theme",
+                    Type = SettingType.Dropdown,
+                    Value = "Dark",
+                    Options = "[\"Light\",\"Dark\",\"System\"]",
+                    Description = "Application color theme",
+                    CreatedAt = DateTime.UtcNow
+                },
+                new Setting
+                {
+                    Id = Guid.NewGuid(),
+                    Section = "UI",
+                    Key = "ResultsPerPage",
+                    Name = "Results Per Page",
+                    Type = SettingType.Integer,
+                    Value = "25",
+                    IntValue = 25,
+                    MinIntValue = 5,
+                    MaxIntValue = 100,
+                    Description = "Number of items to display per page",
+                    CreatedAt = DateTime.UtcNow
+                },
+
+                // Notification Settings
+                new Setting
+                {
+                    Id = Guid.NewGuid(),
+                    Section = "Notifications",
+                    Key = "EmailAlertsEnabled",
+                    Name = "Email Alerts Enabled",
+                    Type = SettingType.Boolean,
+                    Value = "true",
+                    BoolValue = true,
+                    Description = "Enable email notifications",
+                    CreatedAt = DateTime.UtcNow
+                },
+                new Setting
+                {
+                    Id = Guid.NewGuid(),
+                    Section = "Notifications",
+                    Key = "AlertThreshold",
+                    Name = "Alert Threshold",
+                    Type = SettingType.Decimal,
+                    Value = "0.75",
+                    DecimalValue = 0.75m,
+                    MinDecimalValue = 0.1m,
+                    MaxDecimalValue = 1.0m,
+                    Description = "Threshold for sending alerts (0.0-1.0)",
+                    CreatedAt = DateTime.UtcNow
+                },
+
                 // System Settings
                 new Setting
                 {
+                    Id = Guid.NewGuid(),
+                    Section = "System",
                     Key = "MaintenanceMode",
+                    Name = "Maintenance Mode",
+                    Type = SettingType.Boolean,
                     Value = "false",
-                    Description = "Whether the application is in maintenance mode",
+                    BoolValue = false,
+                    Description = "Put system in maintenance mode",
+                    IsSystem = true,
+                    CreatedAt = DateTime.UtcNow
+                },
+                new Setting
+                {
+                    Id = Guid.NewGuid(),
                     Section = "System",
-                    IsEncrypted = false
-                },
-                new Setting
-                {
-                    Key = "CacheDuration",
-                    Value = "60",
-                    Description = "Default cache duration in seconds",
-                    Section = "System",
-                    IsEncrypted = false
-                },
-                new Setting
-                {
-                    Key = "LogRetentionDays",
-                    Value = "30",
-                    Description = "Number of days to keep log files",
-                    Section = "System",
-                    IsEncrypted = false
-                },
-    
-                // Localization Settings
-                new Setting
-                {
-                    Key = "DefaultCulture",
-                    Value = "en-US",
-                    Description = "Default culture for the application",
-                    Section = "Localization",
-                    IsEncrypted = false
-                },
-                new Setting
-                {
-                    Key = "SupportedCultures",
-                    Value = "en-US,es-ES,fr-FR",
-                    Description = "Comma-separated list of supported cultures",
-                    Section = "Localization",
-                    IsEncrypted = false
-                },
-                new Setting
-                {
-                    Key = "TimeZone",
-                    Value = "UTC",
-                    Description = "Default timezone for the application",
-                    Section = "Localization",
-                    IsEncrypted = false
-                },
-    
-                // Email Settings
-                new Setting
-                {
-                    Key = "SmtpServer",
-                    Value = "mail.example.com",
-                    Description = "SMTP server for sending emails",
-                    Section = "Email",
-                    IsEncrypted = false
-                },
-                new Setting
-                {
-                    Key = "SmtpPort",
-                    Value = "587",
-                    Description = "SMTP server port",
-                    Section = "Email",
-                    IsEncrypted = false
-                },
-                new Setting
-                {
-                    Key = "SmtpUsername",
-                    Value = "encrypted-username",
-                    Description = "SMTP authentication username",
-                    Section = "Email",
-                    IsEncrypted = true
-                },
-                new Setting
-                {
-                    Key = "SmtpPassword",
-                    Value = "encrypted-password",
-                    Description = "SMTP authentication password",
-                    Section = "Email",
-                    IsEncrypted = true
-                },
-                new Setting
-                {
-                    Key = "FromEmail",
-                    Value = "noreply@example.com",
-                    Description = "Default sender email address",
-                    Section = "Email",
-                    IsEncrypted = false
+                    Key = "NextMaintenanceWindow",
+                    Name = "Next Maintenance Window",
+                    Type = SettingType.DateTime,
+                    Value = DateTime.UtcNow.AddDays(30).ToString("o"),
+                    DateTimeValue = DateTime.UtcNow.AddDays(30),
+                    Description = "Scheduled next maintenance window",
+                    IsSystem = true,
+                    CreatedAt = DateTime.UtcNow
                 }
             };
 

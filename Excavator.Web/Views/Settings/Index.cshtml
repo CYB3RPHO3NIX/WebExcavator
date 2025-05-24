@@ -26,13 +26,25 @@
 @section Scripts {
     <script>
         $(document).ready(function() {
+            // Initialize function for Semantic UI components
+            function initializeSemanticUI(context = document) {
+                $(context).find('.ui.dropdown').dropdown({
+                    fullTextSearch: true,
+                    forceSelection: false
+                });
+                $(context).find('.ui.checkbox').checkbox();
+                // Add other Semantic UI initializations as needed
+            }
+
             // Load menu initially
             loadMenu();
 
-            // Function to load menu
             function loadMenu() {
                 $('#settingsMenuContainer').load('@Url.Action("GetMenu", "Settings")', function() {
-                    // After menu loads, click the first item if none is active
+                    // Initialize menu dropdowns
+                    initializeSemanticUI('#settingsMenuContainer');
+
+                    // Click first item if none active
                     if ($('#settingsMenuContainer .active.item').length === 0) {
                         $('#settingsMenuContainer .item:first').click();
                     }
@@ -48,14 +60,17 @@
                 $('#settingsMenuContainer .item').removeClass('active');
                 $(this).addClass('active');
 
-                // Load content
-                loadSettingsContent(section);
+                // Load content with callback
+                $('#settingsContentContainer').load(
+                    '@Url.Action("GetSettings", "Settings")' + '?section=' + encodeURIComponent(section),
+                    function() {
+                        initializeSemanticUI('#settingsContentContainer');
+                    }
+                );
             });
 
-            // Function to load settings content
-            function loadSettingsContent(section) {
-                $('#settingsContentContainer').load('@Url.Action("GetSettings", "Settings")' + '?section=' + encodeURIComponent(section));
-            }
+            // Initialize any static elements on page load
+            initializeSemanticUI();
         });
     </script>
 }

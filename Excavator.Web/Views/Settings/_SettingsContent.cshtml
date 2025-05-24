@@ -1,17 +1,31 @@
-﻿@using Excavator.Shared.Models.DTOs.Settings
+﻿@using Excavator.Database.Entities.Settings
+@using Excavator.Shared.Models.DTOs.Settings
 @model List<SettingDTO>
 
 @if (Model.Any())
 {
     <div class="ui segment">
         <div class="ui grid">
-
             @foreach (var setting in Model)
             {
                 <div class="two column row">
                     <div class="left floated column">
                         <div class="header"><b>@setting.Key</b></div>
                         <div class="description" style="color: gray;">@setting.Description</div>
+                        @if (setting.Type != SettingType.String)
+                        {
+                            <div class="meta" style="color: #888; font-size: 0.8em; margin-top: 5px;">
+                                Type: @setting.Type
+                                @if (setting.Type == SettingType.Integer || setting.Type == SettingType.Decimal)
+                                {
+                                    <span> (Min: @(setting.MinValue ?? "none") | Max: @(setting.MaxValue ?? "none"))</span>
+                                }
+                                else if (setting.Type == SettingType.DateTime)
+                                {
+                                    <span> (Range: @(setting.MinValue ?? "none") to @(setting.MaxValue ?? "none"))</span>
+                                }
+                            </div>
+                        }
                     </div>
                     <div class="right floated column">
                         @if (setting.IsEncrypted)
@@ -23,19 +37,82 @@
                                     Encrypted
                                 </a>
                             </div>
-                        }else
+                        }
+                        else
                         {
-                            <div class="ui fluid input">
-                                <input type="text" value="@setting.Value"
-                                       data-key="@setting.Key"
-                                       data-original="@setting.Value"
-                                @(setting.IsEncrypted ? "disabled" : "")>
-                            </div>
+                            switch (setting.Type)
+                            {
+                                case SettingType.Boolean:
+                                    <div class="ui toggle checkbox">
+                                        <input type="checkbox" @(setting.Value.ToLower() == "true" ? "checked" : "")
+                                               data-key="@setting.Key"
+                                               data-type="@setting.Type"
+                                               data-original="@setting.Value">
+                                        <label></label>
+                                    </div>
+                                    break;
+                                
+                                case SettingType.Dropdown when setting.Options.Any():
+                                    <select class="ui fluid dropdown" 
+                                            data-key="@setting.Key"
+                                            data-type="@setting.Type"
+                                            data-original="@setting.Value">
+                                        @foreach (var option in setting.Options)
+                                        {
+                                            @if (option == setting.Value)
+                                            {
+                                                <option value="@option" selected>@option</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@option">@option</option>
+                                            }
+                                        }
+                                    </select>
+                                    break;
+                                
+                                case SettingType.Integer:
+                                case SettingType.Decimal:
+                                    <div class="ui right labeled fluid input">
+                                        <input type="number" value="@setting.Value"
+                                               data-key="@setting.Key"
+                                               data-type="@setting.Type"
+                                               data-original="@setting.Value"
+                                               min="@setting.MinValue"
+                                               max="@setting.MaxValue">
+                                        @if (setting.Type == SettingType.Decimal)
+                                        {
+                                            <div class="ui basic label">.00</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="ui basic label">#</div>
+                                        }
+                                    </div>
+                                    break;
+                                
+                                case SettingType.DateTime:
+                                    <div class="ui fluid input">
+                                        <input type="datetime-local" value="@setting.Value"
+                                               data-key="@setting.Key"
+                                               data-type="@setting.Type"
+                                               data-original="@setting.Value">
+                                    </div>
+                                    break;
+                                
+                                default:
+                                    <div class="ui fluid input">
+                                        <input type="text" value="@setting.Value"
+                                               data-key="@setting.Key"
+                                               data-type="@setting.Type"
+                                               data-original="@setting.Value">
+                                    </div>
+                                    break;
+                            }
                         }
                     </div>
                 </div>
             }
-            
         </div>
     </div>
 }
